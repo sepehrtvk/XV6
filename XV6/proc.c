@@ -532,3 +532,8 @@ procdump(void)
     cprintf("\n");
   }
 }
+
+int getHelloWorld (void){
+  cprintf("Heloooooo !!!\n");
+  return 0;
+}
