@@ -537,3 +537,16 @@ int getHelloWorld (void){
   cprintf("Heloooooo !!!\n");
   return 0;
 }
+
+int getProcCount(void){
+
+  struct proc *p;
+  int procCounter = 0;
+
+  for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
+     if(p->state == UNUSED) procCounter++;
+  }
+
+  cprintf("Number of Processes : %d\n",procCounter);
+  return procCounter;
+}

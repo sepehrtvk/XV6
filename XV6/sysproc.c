@@ -93,3 +93,7 @@ sys_uptime(void)
 int sys_getHelloWorld(void) {
   return getHelloWorld();
 }
+
+int sys_getProcCount(void) {
+  return getProcCount();
+}
