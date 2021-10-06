@@ -544,7 +544,7 @@ int getProcCount(void){
   int procCounter = 0;
 
   for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
-     if(p->state == UNUSED) procCounter++;
+     if(p->state != UNUSED) procCounter++;
   }
 
   cprintf("Number of Processes : %d\n",procCounter);
