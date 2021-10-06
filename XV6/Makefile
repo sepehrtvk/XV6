@@ -183,6 +183,7 @@ UPROGS=\
 	_zombie\
 	_sysHelloWorldTest\
 	_getProcCountTest\
+	_getReadCountTest\
 
 fs.img: mkfs README $(UPROGS)
 	./mkfs fs.img README $(UPROGS)
@@ -257,6 +258,7 @@ EXTRA=\
 	.gdbinit.tmpl gdbutil\
 	sysHelloWorldTest.c\
 	getProcCountTest.c\
+	getReadCountTest.c\
 
 dist:
 	rm -rf dist

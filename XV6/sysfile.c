@@ -66,9 +66,14 @@ sys_dup(void)
   return fd;
 }
 
+int readCount = 0;
+
 int
 sys_read(void)
 {
+
+  readCount++;
+
   struct file *f;
   int n;
   char *p;

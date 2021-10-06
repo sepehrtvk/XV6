@@ -550,3 +550,11 @@ int getProcCount(void){
   cprintf("Number of Processes : %d\n",procCounter);
   return procCounter;
 }
+
+int getReadCount(void) {
+  // int readCount;
+  // cprintf("Number of Read  : %d\n",readCount);
+  // return readCount;
+  cprintf("dasaasas");
+  return 0;
+}

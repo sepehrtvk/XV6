@@ -97,3 +97,9 @@ int sys_getHelloWorld(void) {
 int sys_getProcCount(void) {
   return getProcCount();
 }
+
+extern int readCount;
+
+int sys_getReadCount(void) {
+  return getReadCount();
+}
