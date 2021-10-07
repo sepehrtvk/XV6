@@ -551,10 +551,10 @@ int getProcCount(void){
   return procCounter;
 }
 
-int getReadCount(void) {
-  // int readCount;
-  // cprintf("Number of Read  : %d\n",readCount);
-  // return readCount;
-  cprintf("dasaasas");
-  return 0;
-}
+// int getReadCount(void) {
+//   // int readCount;
+//   // cprintf("Number of Read  : %d\n",readCount);
+//   // return readCount;
+//   cprintf("dasaasas");
+//   return 0;
+// }

@@ -85,7 +85,7 @@ sys_uptime(void)
   uint xticks;
 
   acquire(&tickslock);
-  xticks = ticks;
+  xticks = ticks;                   
   release(&tickslock);
   return xticks;
 }
@@ -101,5 +101,7 @@ int sys_getProcCount(void) {
 extern int readCount;
 
 int sys_getReadCount(void) {
-  return getReadCount();
+  // return getReadCount();
+  cprintf("Number of Read  : %d\n",readCount);
+  return readCount;
 }
