@@ -143,7 +143,7 @@ tags: $(OBJS) entryother.S _init
 vectors.S: vectors.pl
 	./vectors.pl > vectors.S
 
-ULIB = ulib.o usys.o printf.o umalloc.o
+ULIB = ulib.o usys.o printf.o umalloc.o thread_creator.o
 
 _%: %.o $(ULIB)
 	$(LD) $(LDFLAGS) -N -e main -Ttext 0 -o $@ $^
@@ -184,6 +184,9 @@ UPROGS=\
 	_sysHelloWorldTest\
 	_getProcCountTest\
 	_getReadCountTest\
+	_functionPassTest\
+	_forkTest\
+	_threadTest\
 
 fs.img: mkfs README $(UPROGS)
 	./mkfs fs.img README $(UPROGS)
@@ -259,6 +262,9 @@ EXTRA=\
 	sysHelloWorldTest.c\
 	getProcCountTest.c\
 	getReadCountTest.c\
+	threadTest.c\
+	forkTest.c\
+	functionPassTest.c\
 
 dist:
 	rm -rf dist

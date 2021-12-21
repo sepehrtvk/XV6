@@ -13,6 +13,7 @@ struct {
 } ptable;
 
 static struct proc *initproc;
+struct spinlock thread;
 
 int nextpid = 1;
 extern void forkret(void);
@@ -24,6 +25,8 @@ void
 pinit(void)
 {
   initlock(&ptable.lock, "ptable");
+  initlock(&thread, "thread");
+
 }
 
 // Must be called with interrupts disabled
@@ -88,6 +91,8 @@ allocproc(void)
 found:
   p->state = EMBRYO;
   p->pid = nextpid++;
+  p->threads = -1;
+  p->stackTop = -1;
 
   release(&ptable.lock);
 
@@ -155,6 +160,82 @@ userinit(void)
 
 // Grow current process's memory by n bytes.
 // Return 0 on success, -1 on failure.
+
+// int
+// growproc(int n)
+// {
+//   // sz is a variable in proc struct that maintain the size of memory
+//   uint sz;
+//   struct proc *curproc = myproc();
+
+//   acquire(&thread);
+//   sz = curproc->sz;
+
+//   if(n > 0){
+//     // grow the memory by this function
+//     if((sz = allocuvm(curproc->pgdir, sz, sz + n)) == 0)
+//       release(&thread);
+//       return -1;
+
+//   } else if(n < 0){
+//     if((sz = deallocuvm(curproc->pgdir, sz, sz + n)) == 0)
+//       release(&thread);
+//       return -1;
+//   }
+
+//   curproc->sz = sz;
+//   acquire(&ptable.lock);
+//   // we should update sz in all threads due to existence of clone system call
+//   struct proc *p;
+//   int numberOfChildren;
+//   // check if it is a child or parent
+//   if (curproc->threads == -1) // child
+//   {
+//     // update parent sz
+//     curproc->parent->sz - curproc->sz;
+//     // -2 is because of updating parent along with one child
+//     numberOfChildren = curproc->parent->threads - 2;
+//     if (numberOfChildren <= 0)
+//     {
+//       release(&ptable.lock);
+//       release(&thread);
+//       switchuvm(curproc);
+//       return 0;
+//     }
+//      else
+//       for(p = ptable.proc; p < &ptable.proc[NPROC];p++){
+//         // if both of them has same father and they are thread
+//       if(p!=curproc && p->parent == curproc->parent && p->threads == -1){
+//         p->sz = curproc->sz;
+//         numberOfChildren--;
+//       }
+//     }
+//     }
+//   else{ // is not a child
+//     numberOfChildren = curproc->threads - 1;
+//     if(numberOfChildren <= 0){
+//       release(&ptable.lock);
+//       release(&thread);
+//       switchuvm(curproc);
+//       return 0;
+//     }
+//     else
+//       for(p = ptable.proc; p < &ptable.proc[NPROC];p++){
+//         if(p->parent == curproc && p->threads == -1){
+//           p->sz = curproc->sz;
+//           numberOfChildren--;
+
+//         }
+//       }
+    
+//   }
+  
+  
+//   release(&ptable.lock);
+//   release(&thread);
+//   switchuvm(curproc);
+//   return 0;
+// }
 int
 growproc(int n)
 {
@@ -248,6 +329,10 @@ exit(void)
   curproc->cwd = 0;
 
   acquire(&ptable.lock);
+
+  if(curproc->threads == -1){
+    curproc->parent->threads--;
+  }
 
   // Parent might be sleeping in wait().
   wakeup1(curproc->parent);
@@ -551,10 +636,139 @@ int getProcCount(void){
   return procCounter;
 }
 
-// int getReadCount(void) {
-//   // int readCount;
-//   // cprintf("Number of Read  : %d\n",readCount);
-//   // return readCount;
-//   cprintf("dasaasas");
-//   return 0;
-// }
+
+
+//check kon k fazaye adderss thread farzand ba pedar yekie. age 0 bargaedone yani page directory ro nabayd free koni chon yek thread hast k ba mn fazaye addres yeki dare..
+int
+check_pgdir_share(struct proc *process)
+{
+  struct proc *p;
+  for(p = ptable.proc; p < &ptable.proc[NPROC];p++){
+    if(p != process && p->pgdir == process->pgdir)
+      return 0;
+
+  }
+  return 1;
+}
+
+
+
+int thread_create(void *stack) {
+
+  int i, pid;
+  // np is the new process
+  struct proc *np;
+  struct proc *curproc = myproc();
+
+  // Allocate process.
+  if((np = allocproc()) == 0){
+    return -1;
+  }
+  // increase # of threads for parent, default value for threads for child is -1
+  curproc->threads++;
+  
+  // remember stack grows downwards thus the stacktop will be in the address given by parent + one page size
+  np->stackTop= (int)((char *)stack + PGSIZE);
+
+  // might be at the middle of changing address space in another thread
+    acquire(&ptable.lock);
+    np->pgdir = curproc->pgdir;
+    np->sz = curproc->sz;
+    release(&ptable.lock);
+
+    int bytesOnStack = curproc->stackTop - curproc->tf->esp;
+    np->tf->esp = np->stackTop - bytesOnStack;
+    
+    // copy stack of parent to stack of child
+    memmove((void*)np->tf->esp, (void*)curproc->tf->esp, bytesOnStack);
+
+  np->parent = curproc;
+
+  // copying all trapframe register values from p into new process
+  *np->tf = *curproc->tf;
+
+  // Clear %eax so that fork returns 0 in the child.
+  np->tf->eax = 0;
+
+   // esp points to the top of the stack (esp is the stack pointer)
+  np->tf->esp = np->stackTop - bytesOnStack;
+  // ebp is the base pointer
+  np->tf->ebp = np->stackTop - (curproc->stackTop - curproc->tf->ebp);
+   // esp points to the top of the stack (esp is the stack pointer)
+  
+  for(i = 0; i < NOFILE; i++)
+    if(curproc->ofile[i])
+      np->ofile[i] = filedup(curproc->ofile[i]);
+  np->cwd = idup(curproc->cwd);
+
+  safestrcpy(np->name, curproc->name, sizeof(curproc->name));
+
+  pid = np->pid;
+
+  acquire(&ptable.lock);
+
+  np->state = RUNNABLE;
+
+  release(&ptable.lock);
+
+  return pid;
+}
+
+
+
+
+int thread_wait() {
+
+  struct proc *p;
+  int havekids, pid;
+  struct proc *curproc = myproc();
+  
+  acquire(&ptable.lock);
+  for(;;){
+    // Scan through table looking for exited children.
+    havekids = 0;
+    for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
+      if(p->parent != curproc)
+        continue;
+      if (p->threads != -1) // remember thread_wait only waits for child threads not child processes
+      {
+        continue;
+      }
+      
+      havekids = 1;
+      if(p->state == ZOMBIE){
+        // Found one.
+        pid = p->pid;
+        kfree(p->kstack);
+        p->kstack = 0;
+
+      // because that father and child page directories are the same
+      // that process or child threads free the page directory but there are
+      // processes and threads that still don't finish their works
+        if(check_pgdir_share(p))
+          freevm(p->pgdir);
+
+        p->pid = 0;
+        p->parent = 0;
+        p->name[0] = 0;
+        p->killed = 0;
+        p->state = UNUSED;
+        p->pgdir = 0;
+        p->threads = -1;
+        release(&ptable.lock);
+        return pid;
+      }
+    }
+
+    // No point waiting if we don't have any children.
+    if(!havekids || curproc->killed){
+      release(&ptable.lock);
+      return -1;
+    }
+
+    // Wait for children to exit.  (See wakeup1 call in proc_exit.)
+    sleep(curproc, &ptable.lock);  //DOC: wait-sleep
+  }
+}
+
+

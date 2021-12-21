@@ -105,3 +105,16 @@ int sys_getReadCount(void) {
   cprintf("Number of Read  : %d\n",readCount);
   return readCount;
 }
+
+int sys_thread_create(void){
+  int stackptr = 0;
+  if(argint(0,&stackptr) < 0 ){
+    return -1;
+  }
+  return thread_create((void*) stackptr);
+}
+
+int sys_thread_wait(void){
+  return thread_wait();
+}
+
