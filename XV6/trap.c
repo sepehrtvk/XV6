@@ -113,7 +113,7 @@ trap(struct trapframe *tf)
     case ROUND_ROBIN:
       if (myproc()->rrRemainingTime == 0)
       {
-        // Reset remainin time back to quantum
+        // Reset remaining time back to quantum
         myproc()->rrRemainingTime = QUANTUM;
         yield();
       }
