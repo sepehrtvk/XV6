@@ -405,6 +405,28 @@ wait(void)
   }
 }
 
+
+
+
+void contextSwitch(struct cpu *c, struct proc *p)
+{
+  // Switch to chosen process.  It is the process's job
+  // to release ptable.lock and then reacquire it
+  // before jumping back to us.
+  c->proc = p;
+  switchuvm(p);
+  p->state = RUNNING;
+
+  swtch(&(c->scheduler), p->context);
+  switchkvm();
+
+  // Process is done running for now.
+  // It should have changed its p->state before coming back.
+  c->proc = 0;
+}
+
+
+
 //PAGEBREAK: 42
 // Per-CPU process scheduler.
 // Each CPU calls scheduler() after setting itself up.
@@ -426,24 +448,31 @@ scheduler(void)
 
     // Loop over process table looking for process to run.
     acquire(&ptable.lock);
-    for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
-      if(p->state != RUNNABLE)
-        continue;
 
-      // Switch to chosen process.  It is the process's job
-      // to release ptable.lock and then reacquire it
-      // before jumping back to us.
-      c->proc = p;
-      switchuvm(p);
-      p->state = RUNNING;
+    switch (policy){
 
-      swtch(&(c->scheduler), p->context);
-      switchkvm();
 
-      // Process is done running for now.
-      // It should have changed its p->state before coming back.
-      c->proc = 0;
+    case DEFAULT:
+
+      for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
+        if(p->state != RUNNABLE)
+          continue;
+        contextSwitch(c,p);
+      }
+      break;
+
+
+    case ROUND_ROBIN:
+
+      for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
+        if(p->state != RUNNABLE)
+          continue;
+        contextSwitch(c,p);
+      }
+      break;
+    
     }
+
     release(&ptable.lock);
 
   }
@@ -775,4 +804,17 @@ for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
 }
 release(&ptable.lock);
 return 22;
+}
+
+
+//change the policy
+int changePolicy(int newPolicy)
+{
+  if (newPolicy >= 0 && newPolicy <= 3)
+  {
+    policy = newPolicy;
+    return 0;
+  }
+  else
+    return -1;
 }

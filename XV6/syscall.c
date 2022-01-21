@@ -109,6 +109,8 @@ extern int sys_getReadCount(void);
 extern int sys_thread_create(void );
 extern int sys_thread_wait(void );
 extern int sys_cps(void);
+extern int sys_changePolicy(void);
+
 
 
 static int (*syscalls[])(void) = {
@@ -138,7 +140,8 @@ static int (*syscalls[])(void) = {
 [SYS_getReadCount] sys_getReadCount,
 [SYS_thread_create] sys_thread_create,
 [SYS_thread_wait] sys_thread_wait,
-[SYS_cps] sys_cps
+[SYS_cps] sys_cps,
+[SYS_changePolicy] sys_changePolicy
 };
 
 void

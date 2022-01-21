@@ -27,3 +27,4 @@
 #define SYS_thread_wait 26
 //for ps
 #define SYS_cps    27
+#define SYS_changePolicy 28

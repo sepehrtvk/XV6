@@ -126,6 +126,8 @@ int             getReadCount(void);
 int             thread_create(void *stack); 
 int             thread_wait(void);  
 int		        cps(void);
+int             changePolicy(int newPolicy);
+
 
 
 // swtch.S
