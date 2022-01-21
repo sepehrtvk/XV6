@@ -314,6 +314,7 @@ exit(void)
   acquire(&ptable.lock);
 
   //for threads
+  //if child calls exit , decremnet the number of threads sharing the same pgdir for parent...
   if(curproc->threads == -1){
     curproc->parent->threads--;
   }
