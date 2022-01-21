@@ -96,7 +96,7 @@ found:
   p->stackTop = -1; //initialize stackTop to -1 (illegal value)
   p->threads = -1; //initialize threads to -1 (illegal value)
   //for schduler
-  //p->priority = 3;
+  p->priority = 3;
   
 
   release(&ptable.lock);
