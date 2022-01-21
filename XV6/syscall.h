@@ -25,3 +25,5 @@
 #define SYS_getReadCount 24
 #define SYS_thread_create 25
 #define SYS_thread_wait 26
+//for ps
+#define SYS_cps    27

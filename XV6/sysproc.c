@@ -118,3 +118,8 @@ int sys_thread_wait(void){
   return thread_wait();
 }
 
+int
+sys_cps(void)
+{
+  return cps();
+}

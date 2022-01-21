@@ -187,6 +187,7 @@ UPROGS=\
 	_functionPassTest\
 	_forkTest\
 	_threadTest\
+	_ps\
 
 fs.img: mkfs README $(UPROGS)
 	./mkfs fs.img README $(UPROGS)
@@ -265,6 +266,7 @@ EXTRA=\
 	threadTest.c\
 	forkTest.c\
 	functionPassTest.c\
+	ps.c\
 
 dist:
 	rm -rf dist
