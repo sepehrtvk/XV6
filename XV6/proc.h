@@ -52,7 +52,16 @@ struct proc {
   int threads;
   int stackTop;
   int status;
-  int priority;
+
+  int rrRemainingTime; // Remaining time left for RR scheduling
+  int priority;       // Process priority, 1 highest, 6 lowest.
+
+  int creationTime;    // Time which this process was created 
+  int sleepingTime;    // Time spent being in SLEEPING state
+  int runnableTime;    // Time spent being in RUNNABLE state
+  int runningTime;     // Time spent being in RUNNING state
+  int terminationTime; // Time which this process was terminated 
+
 };
 
 // Scheduling options

@@ -110,6 +110,10 @@ extern int sys_thread_create(void );
 extern int sys_thread_wait(void );
 extern int sys_cps(void);
 extern int sys_changePolicy(void);
+extern int sys_getTurnAroundTime(void);
+extern int sys_getWaitingTime(void);
+extern int sys_getCBT(void);
+
 
 
 
@@ -141,7 +145,10 @@ static int (*syscalls[])(void) = {
 [SYS_thread_create] sys_thread_create,
 [SYS_thread_wait] sys_thread_wait,
 [SYS_cps] sys_cps,
-[SYS_changePolicy] sys_changePolicy
+[SYS_changePolicy] sys_changePolicy,
+[SYS_getTurnAroundTime] sys_getTurnAroundTime,
+[SYS_getWaitingTime] sys_getWaitingTime,
+[SYS_getCBT] sys_getCBT
 };
 
 void

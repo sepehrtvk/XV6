@@ -99,9 +99,14 @@ found:
   p->pid = nextpid++;
   p->stackTop = -1; //initialize stackTop to -1 (illegal value)
   p->threads = -1; //initialize threads to -1 (illegal value)
+  
   //for schduler
   p->priority = 3;
-  
+  p->sleepingTime = 0;
+  p->runnableTime = 0;
+  p->runningTime = 0;
+  p->rrRemainingTime = QUANTUM;
+
 
   release(&ptable.lock);
 
@@ -453,6 +458,8 @@ scheduler(void)
 
 
     case DEFAULT:
+    case PRIORITY:
+    case MULTILAYRED_PRIORITY:
 
       for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
         if(p->state != RUNNABLE)
@@ -818,3 +825,32 @@ int changePolicy(int newPolicy)
   else
     return -1;
 }
+
+int getTurnAroundTime(int pid)
+{
+  int sleep = (&ptable.proc[pid])->sleepingTime;
+  int runnable = (&ptable.proc[pid])->runnableTime;
+  int running  =  (&ptable.proc[pid])->runningTime;
+  
+  int turnAroundTime = sleep + runnable + running;
+
+  return turnAroundTime;
+}
+
+int getWaitingTime(int pid)
+{
+  int sleep = (&ptable.proc[pid])->sleepingTime;
+  int runnable = (&ptable.proc[pid])->runnableTime;
+  
+  int waitingTime = sleep + runnable ;
+  
+  return waitingTime;
+}
+
+int getCBT(int pid)
+{
+  int running  =  (&ptable.proc[pid])->runningTime;
+  
+  return running;
+}
+

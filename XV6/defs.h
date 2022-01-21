@@ -127,6 +127,10 @@ int             thread_create(void *stack);
 int             thread_wait(void);  
 int		        cps(void);
 int             changePolicy(int newPolicy);
+int             getTurnAroundTime(int pid);
+int             getWaitingTime(int pid);
+int             getCBT(int pid);
+
 
 
 

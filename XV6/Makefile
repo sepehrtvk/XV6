@@ -188,6 +188,8 @@ UPROGS=\
 	_forkTest\
 	_threadTest\
 	_ps\
+	_roundRobinTest\
+
 
 fs.img: mkfs README $(UPROGS)
 	./mkfs fs.img README $(UPROGS)
@@ -267,6 +269,7 @@ EXTRA=\
 	forkTest.c\
 	functionPassTest.c\
 	ps.c\
+	roundRobinTest.c\
 
 dist:
 	rm -rf dist
