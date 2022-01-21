@@ -854,3 +854,27 @@ int getCBT(int pid)
   return running;
 }
 
+void updateTimes()
+{
+  struct proc *p;
+  for (p = ptable.proc; p < &ptable.proc[NPROC]; p++)
+  {
+    switch (p->state)
+    {
+    case SLEEPING:
+      p->sleepingTime++;
+      break;
+
+    case RUNNABLE:
+      p->runnableTime++;
+      break;
+
+    case RUNNING:
+      p->runningTime++;
+      break;
+
+    default:
+      break;
+    }
+  }
+}
