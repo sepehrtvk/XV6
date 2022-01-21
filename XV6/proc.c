@@ -9,6 +9,10 @@
 
 extern int readCount;
 
+// An enum default value is always zero
+enum schedPolicy policy;
+
+
 struct {
   struct spinlock lock;
   struct proc proc[NPROC];

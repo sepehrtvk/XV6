@@ -55,6 +55,18 @@ struct proc {
   int priority;
 };
 
+// Scheduling options
+enum schedPolicy
+{
+  DEFAULT = 0,
+  ROUND_ROBIN = 1,
+  PRIORITY = 2,
+  MULTILAYRED_PRIORITY = 3
+};
+
+extern enum schedPolicy policy;
+
+
 // Process memory is laid out contiguously, low addresses first:
 //   text
 //   original data and bss
