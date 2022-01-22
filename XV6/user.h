@@ -33,6 +33,7 @@ int changePolicy(int newPolicy);
 int getTurnAroundTime(int pid);
 int getWaitingTime(int pid);
 int getCBT(int pid);
+int setPriority(int newPriority);
 
 // ulib.c
 int stat(const char*, struct stat*);

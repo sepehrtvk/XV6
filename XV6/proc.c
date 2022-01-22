@@ -444,6 +444,12 @@ void
 scheduler(void)
 {
   struct proc *p;
+
+  struct proc *highest_p = 0; // runnable process with highest priority
+  struct proc *lowest_p = 0;  // runnable process with lowest priority
+  int hasRunnable = 0;        // Whether there exists a runnable process or not
+
+
   struct cpu *c = mycpu();
   c->proc = 0;
   
@@ -458,17 +464,7 @@ scheduler(void)
 
 
     case DEFAULT:
-    case PRIORITY:
     case MULTILAYRED_PRIORITY:
-
-      for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
-        if(p->state != RUNNABLE)
-          continue;
-        contextSwitch(c,p);
-      }
-      break;
-
-
     case ROUND_ROBIN:
 
       for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
@@ -477,7 +473,34 @@ scheduler(void)
         contextSwitch(c,p);
       }
       break;
-    
+
+    case PRIORITY:
+      hasRunnable = 0;
+      for (p = ptable.proc; p < &ptable.proc[NPROC]; p++)
+      {
+        if (p->state == RUNNABLE)
+        {
+          highest_p = p;
+          hasRunnable = 1;
+          break;
+        }
+      }
+
+      for (p = ptable.proc; p < &ptable.proc[NPROC]; p++) // finding the process with highest priority
+      {
+        if (p->state != RUNNABLE)
+          continue;
+        if (p->priority < highest_p->priority)
+          highest_p = p;
+      }
+
+      if (hasRunnable)
+      {
+        contextSwitch(c, highest_p);
+      }
+
+      break;
+
     }
 
     release(&ptable.lock);
@@ -877,4 +900,18 @@ void updateTimes()
       break;
     }
   }
+}
+
+int setPriority(int newPriority)
+{
+  struct proc *p = myproc();
+  if (newPriority >= 1 && newPriority <= 6)
+  {
+    p->priority = newPriority;
+  }
+  else {
+      p->priority = 5;
+   }
+  return 0;
+
 }

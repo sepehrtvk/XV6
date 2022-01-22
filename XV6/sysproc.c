@@ -159,3 +159,12 @@ int sys_getCBT(void)
   else
     return getCBT(pid);
 }
+
+int sys_setPriority(void)
+{
+  int newPriority;
+  if (argint(0, &newPriority) < 0)
+    return -1;
+  else
+    return setPriority(newPriority);
+}

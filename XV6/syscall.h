@@ -31,4 +31,5 @@
 #define SYS_getTurnAroundTime 29
 #define SYS_getWaitingTime 30
 #define SYS_getCBT 31
+#define SYS_setPriority 32
 

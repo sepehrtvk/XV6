@@ -131,6 +131,7 @@ int             getTurnAroundTime(int pid);
 int             getWaitingTime(int pid);
 int             getCBT(int pid);
 void            updateTimes();
+int             setPriority(int newPriority);
 
 
 
