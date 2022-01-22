@@ -168,3 +168,16 @@ int sys_setPriority(void)
   else
     return setPriority(newPriority);
 }
+
+int sys_wait2(void) {
+  int *turnAroundtime,  *waitingtime,  *cbttime , *pario;
+  if (argptr(0, (void*)&turnAroundtime, sizeof(turnAroundtime)) < 0)
+    return -1;
+  if (argptr(1, (void*)&waitingtime, sizeof(waitingtime)) < 0)
+    return -1;
+  if (argptr(2, (void*)&cbttime, sizeof(cbttime)) < 0)
+    return -1;
+  if (argptr(3, (void*)&pario, sizeof(pario)) < 0)
+    return -1;
+  return wait2(turnAroundtime,  waitingtime,  cbttime , pario);
+}

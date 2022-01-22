@@ -184,9 +184,6 @@ UPROGS=\
 	_sysHelloWorldTest\
 	_getProcCountTest\
 	_getReadCountTest\
-	_functionPassTest\
-	_forkTest\
-	_threadTest\
 	_ps\
 	_roundRobinTest\
 	_prioritySchedTest\
@@ -265,9 +262,6 @@ EXTRA=\
 	sysHelloWorldTest.c\
 	getProcCountTest.c\
 	getReadCountTest.c\
-	threadTest.c\
-	forkTest.c\
-	functionPassTest.c\
 	ps.c\
 	roundRobinTest.c\
 	prioritySchedTest.c\

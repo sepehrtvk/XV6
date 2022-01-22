@@ -114,6 +114,8 @@ extern int sys_getTurnAroundTime(void);
 extern int sys_getWaitingTime(void);
 extern int sys_getCBT(void);
 extern int sys_setPriority(void);
+extern int sys_wait2(void);
+
 
 
 
@@ -150,7 +152,8 @@ static int (*syscalls[])(void) = {
 [SYS_getTurnAroundTime] sys_getTurnAroundTime,
 [SYS_getWaitingTime] sys_getWaitingTime,
 [SYS_getCBT] sys_getCBT,
-[SYS_setPriority] sys_setPriority
+[SYS_setPriority] sys_setPriority,
+[SYS_wait2] sys_wait2
 };
 
 void

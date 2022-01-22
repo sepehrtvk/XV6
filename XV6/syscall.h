@@ -32,4 +32,5 @@
 #define SYS_getWaitingTime 30
 #define SYS_getCBT 31
 #define SYS_setPriority 32
+#define SYS_wait2    33
 

@@ -34,6 +34,7 @@ int getTurnAroundTime(int pid);
 int getWaitingTime(int pid);
 int getCBT(int pid);
 int setPriority(int newPriority);
+int wait2(int *turnAroundtime, int *waitingtime, int *cbttime ,int *pario);
 
 // ulib.c
 int stat(const char*, struct stat*);

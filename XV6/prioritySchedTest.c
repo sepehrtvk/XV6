@@ -48,14 +48,15 @@ int main(int argc, char *argv[])
         int CBTs[NUM_CHILDREN] = {0};        // CBTs for each child
 
         printf(1, "\n\n\n*****Times for each child*****\n");
-        int *procTimes = malloc(4 * sizeof(int));
+        // int *procTimes = malloc(4 * sizeof(int));
         int i = 0;
-        while (customWait(procTimes) > 0)
+        int turnAroundtime, waitingtime,  cbttime , pario;
+        while (wait2(&turnAroundtime, &waitingtime,  &cbttime , &pario) > 0)
         {
-            int childPriority = procTimes[3];
-            int childTurnaround = procTimes[0];
-            int childWaiting = procTimes[1];
-            int childCBT = procTimes[2];
+            int childPriority = pario;
+            int childTurnaround = turnAroundtime;
+            int childWaiting = waitingtime;
+            int childCBT = cbttime;
 
             priorities[i] = childPriority;
             turnarounds[i] = childTurnaround;
