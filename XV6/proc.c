@@ -446,7 +446,6 @@ scheduler(void)
   struct proc *p;
 
   struct proc *highest_p = 0; // runnable process with highest priority
-  struct proc *lowest_p = 0;  // runnable process with lowest priority
   int hasRunnable = 0;        // Whether there exists a runnable process or not
 
 
