@@ -105,7 +105,7 @@ found:
   p->sleepingTime = 0;
   p->runnableTime = 0;
   p->runningTime = 0;
-  p->rrRemainingTime = QUANTUM;
+  // p->rrRemainingTime = QUANTUM;
 
 
   release(&ptable.lock);
@@ -952,9 +952,9 @@ int wait2(int *turnAroundtime, int *waitingtime, int *cbttime ,int *pario)
         p->state = UNUSED;
 
         //reset times
-        p->runnableTime=0;
-        p->sleepingTime=0;
-        p->runningTime=0;
+        // p->runnableTime=0;
+        // p->sleepingTime=0;
+        // p->runningTime=0;
 
         release(&ptable.lock);
         return pid;

@@ -53,7 +53,7 @@ struct proc {
   int stackTop;
   int status;
 
-  int rrRemainingTime; // Remaining time left for RR scheduling
+  // int rrRemainingTime; // Remaining time left for RR scheduling
   int priority;       // Process priority, 1 highest, 6 lowest.
 
   int creationTime;    // Time which this process was created 
