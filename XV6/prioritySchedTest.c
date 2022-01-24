@@ -21,6 +21,7 @@ int main(int argc, char *argv[])
     //make process
     for (int i = 0; i < NUM_CHILDREN; i++)
     {
+        sleep(100);
         if (fork() == 0) // Child
         {
             child_num = i + 1;
