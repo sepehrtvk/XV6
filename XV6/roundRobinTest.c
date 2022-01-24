@@ -3,7 +3,7 @@
 #include "user.h"
 
 // number of children created
-#define NUM_CHILDREN 6
+#define NUM_CHILDREN 10
 
 int main(int argc, char *argv[])
 {
@@ -26,7 +26,7 @@ int main(int argc, char *argv[])
 
     if (getpid() != main_pid)
     {
-        for (int i = 1; i <= 100; i++){
+        for (int i = 1; i <= 1000; i++){
             int pid = getpid();
             printf(1, "PID=/%d/ : i=/%d/\n",pid , i);
         }
