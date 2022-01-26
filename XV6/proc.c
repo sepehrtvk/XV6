@@ -501,7 +501,17 @@ scheduler(void)
       break;
 
     case MULTILAYRED_PRIORITY:
-    
+      for (int currentQueue = 1; currentQueue <= 6; currentQueue++){
+          for (p = ptable.proc; p < &ptable.proc[NPROC]; p++){
+              if (p->state == RUNNABLE && p->queue == currentQueue ) {
+                contextSwitch(c, p);
+                break;
+              }
+          }
+      }
+      break;
+
+    case DYNAMIC_MULTILAYER_PRIOITY:
       for (int currentQueue = 1; currentQueue <= 6; currentQueue++){
           for (p = ptable.proc; p < &ptable.proc[NPROC]; p++){
               if (p->state == RUNNABLE && p->queue == currentQueue ) {
@@ -618,14 +628,29 @@ sleep(void *chan, struct spinlock *lk)
 //PAGEBREAK!
 // Wake up all processes sleeping on chan.
 // The ptable lock must be held.
+// static void
+// wakeup1(void *chan)
+// {
+//   struct proc *p;
+
+//   for(p = ptable.proc; p < &ptable.proc[NPROC]; p++)
+//     if(p->state == SLEEPING && p->chan == chan)
+//       p->state = RUNNABLE;
+// }
 static void
 wakeup1(void *chan)
 {
   struct proc *p;
-
-  for(p = ptable.proc; p < &ptable.proc[NPROC]; p++)
-    if(p->state == SLEEPING && p->chan == chan)
+  for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
+    
+    if(p->state == SLEEPING && p->chan == chan){
       p->state = RUNNABLE;
+      if(policy== 4){
+        p->queue = 1;
+        p->priority =  1;
+      }
+    }
+}
 }
 
 // Wake up all processes sleeping on chan.
@@ -851,7 +876,7 @@ return 22;
 //change the policy
 int changePolicy(int newPolicy)
 {
-  if (newPolicy >= 0 && newPolicy <= 3)
+  if (newPolicy >= 0 && newPolicy <= 4)
   {
     policy = newPolicy;
     return 0;
@@ -952,8 +977,9 @@ int wait2(int *turnAroundtime, int *waitingtime, int *cbttime ,int *pario)
         *waitingtime = getWaitingTime(p->pid);
         *cbttime = getCBT(p->pid);
 
-        if(policy == 3){
+        if(policy == 3 || policy == 4){
           *pario = p->queue;
+          // *pario = p->priority;
         }else{
           *pario = p->priority;
         }

@@ -172,6 +172,59 @@ trap(struct trapframe *tf)
       
     break;
 
+    case DYNAMIC_MULTILAYER_PRIOITY:
+        switch (myproc()->queue){
+      case 1:
+        if( ticks % (QUANTUM+6) == 0 ){
+          //  myproc()->queue++;
+          setQueue(myproc()->queue+1);
+          yield();
+         
+        }
+        break;
+
+      case 2:
+        if( ticks % (QUANTUM+5) == 0 ){
+          setQueue(myproc()->queue+1);
+          yield();
+        }
+        break;
+
+      case 3:
+        if( ticks % (QUANTUM+4) == 0 ){
+           setQueue(myproc()->queue+1);
+          yield();
+        }
+        break;
+
+      case 4:
+        if( ticks % (QUANTUM+3) == 0 ){
+           setQueue(myproc()->queue+1);
+          yield();
+        }
+        break;
+
+      case 5:
+        if( ticks % (QUANTUM+2) == 0 ){
+           setQueue(myproc()->queue+1);
+          yield();
+        }
+        break;
+
+      case 6:
+        if( ticks % (QUANTUM+1) == 0 ){
+          setQueue(myproc()->queue+1);
+          yield();
+        }
+        break;
+      
+      default:
+        setQueue(myproc()->queue+1);
+          yield();
+        break;
+      }
+    break;
+
     case PRIORITY:
       yield();
       break;

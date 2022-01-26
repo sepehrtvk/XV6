@@ -7,6 +7,9 @@
 #include "x86.h"
 #include "elf.h"
 
+extern enum schedPolicy policy;
+
+
 int
 exec(char *path, char **argv)
 {
@@ -107,6 +110,11 @@ exec(char *path, char **argv)
   curproc->threads = 1;
   curproc->stackTop = sp;
   
+  if(policy==4){ 
+  curproc->queue=3;
+  }
+
+
   switchuvm(curproc);
   freevm(oldpgdir);
   return 0;

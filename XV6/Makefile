@@ -181,13 +181,13 @@ UPROGS=\
 	_usertests\
 	_wc\
 	_zombie\
-	_sysHelloWorldTest\
 	_getProcCountTest\
 	_getReadCountTest\
 	_ps\
 	_roundRobinTest\
 	_prioritySchedTest\
 	_multiLayeredQueuedTest\
+	_dynamicLayeredQueueTest\
 
 fs.img: mkfs README $(UPROGS)
 	./mkfs fs.img README $(UPROGS)
@@ -260,13 +260,13 @@ EXTRA=\
 	printf.c umalloc.c\
 	README dot-bochsrc *.pl toc.* runoff runoff1 runoff.list\
 	.gdbinit.tmpl gdbutil\
-	sysHelloWorldTest.c\
 	getProcCountTest.c\
 	getReadCountTest.c\
 	ps.c\
 	roundRobinTest.c\
 	prioritySchedTest.c\
 	multiLayeredQueuedTest.c\
+	dynamicLayeredQueueTest.c\
 
 dist:
 	rm -rf dist

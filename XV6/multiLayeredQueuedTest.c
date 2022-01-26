@@ -21,7 +21,7 @@ int main(int argc, char *argv[])
 
     for (int i = 0; i < NUM_CHILDREN; i++)
     {
-        sleep(100);
+        // sleep(100);
         if (fork() == 0) // Child
         {
             //give to different queues
