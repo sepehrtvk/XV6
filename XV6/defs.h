@@ -133,6 +133,7 @@ int             getCBT(int pid);
 void            updateTimes();
 int             setPriority(int newPriority);
 int             wait2(int *turnAroundtime, int *waitingtime, int *cbttime ,int *pario);
+int             setQueue(int queueNum);
 
 
 

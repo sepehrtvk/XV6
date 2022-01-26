@@ -115,6 +115,7 @@ extern int sys_getWaitingTime(void);
 extern int sys_getCBT(void);
 extern int sys_setPriority(void);
 extern int sys_wait2(void);
+extern int sys_setQueue(void);
 
 
 
@@ -153,7 +154,8 @@ static int (*syscalls[])(void) = {
 [SYS_getWaitingTime] sys_getWaitingTime,
 [SYS_getCBT] sys_getCBT,
 [SYS_setPriority] sys_setPriority,
-[SYS_wait2] sys_wait2
+[SYS_wait2] sys_wait2,
+[SYS_setQueue] sys_setQueue
 };
 
 void

@@ -181,3 +181,15 @@ int sys_wait2(void) {
     return -1;
   return wait2(turnAroundtime,  waitingtime,  cbttime , pario);
 }
+
+int sys_setQueue(void)
+{
+  int queueNum;
+  if (argint(0, &queueNum) < 0)
+  {    
+    return -1;
+  }
+  else
+    return setQueue(queueNum);
+
+}

@@ -62,6 +62,9 @@ struct proc {
   int runningTime;     // Time spent being in RUNNING state
   int terminationTime; // Time which this process was terminated 
 
+  int queue;                  // Defines in which queue the process belongs
+
+
 };
 
 // Scheduling options

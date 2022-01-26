@@ -41,3 +41,5 @@ SYSCALL(getWaitingTime)
 SYSCALL(getCBT)
 SYSCALL(setPriority)
 SYSCALL(wait2)
+SYSCALL(setQueue)
+

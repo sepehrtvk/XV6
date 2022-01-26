@@ -105,6 +105,8 @@ found:
   p->sleepingTime = 0;
   p->runnableTime = 0;
   p->runningTime = 0;
+  p->queue = 1; // by default each process is in the queue 1
+
   // p->rrRemainingTime = QUANTUM;
 
 
@@ -461,9 +463,7 @@ scheduler(void)
 
     switch (policy){
 
-
     case DEFAULT:
-    case MULTILAYRED_PRIORITY:
     case ROUND_ROBIN:
 
       for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
@@ -498,6 +498,18 @@ scheduler(void)
         contextSwitch(c, highest_p);
       }
 
+      break;
+
+    case MULTILAYRED_PRIORITY:
+    
+      for (int currentQueue = 1; currentQueue <= 6; currentQueue++){
+          for (p = ptable.proc; p < &ptable.proc[NPROC]; p++){
+              if (p->state == RUNNABLE && p->queue == currentQueue ) {
+                contextSwitch(c, p);
+                break;
+              }
+          }
+      }
       break;
 
     }
@@ -936,10 +948,15 @@ int wait2(int *turnAroundtime, int *waitingtime, int *cbttime ,int *pario)
         // Found one.
         // store process times for further calculations
 
-        *turnAroundtime = getTurnAroundTime(p->pid);;
-        *waitingtime = getWaitingTime(p->pid);;
-        *cbttime = getCBT(p->pid);;
-        *pario = p->priority;
+        *turnAroundtime = getTurnAroundTime(p->pid);
+        *waitingtime = getWaitingTime(p->pid);
+        *cbttime = getCBT(p->pid);
+
+        if(policy == 3){
+          *pario = p->queue;
+        }else{
+          *pario = p->priority;
+        }
 
         pid = p->pid;
         kfree(p->kstack);
@@ -969,5 +986,19 @@ int wait2(int *turnAroundtime, int *waitingtime, int *cbttime ,int *pario)
 
     // Wait for children to exit.  (See wakeup1 call in proc_exit.)
     sleep(curproc, &ptable.lock); //DOC: wait-sleep
+  }
+}
+
+int setQueue(int queueNum)
+{
+  struct proc *curproc = myproc();
+  if (queueNum >=1 && queueNum<=6)
+  {
+    curproc->queue = queueNum;
+    return 0;
+  }
+  else
+  {
+    return-1;
   }
 }
