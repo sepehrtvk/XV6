@@ -500,7 +500,7 @@ scheduler(void)
 
       break;
 
-    case MULTILAYRED_PRIORITY:
+      case MULTILAYRED_PRIORITY:
       for (int currentQueue = 1; currentQueue <= 6; currentQueue++){
           for (p = ptable.proc; p < &ptable.proc[NPROC]; p++){
               if (p->state == RUNNABLE && p->queue == currentQueue ) {
@@ -512,8 +512,8 @@ scheduler(void)
       break;
 
     case DYNAMIC_MULTILAYER_PRIOITY:
+    for (p = ptable.proc; p < &ptable.proc[NPROC]; p++){
       for (int currentQueue = 1; currentQueue <= 6; currentQueue++){
-          for (p = ptable.proc; p < &ptable.proc[NPROC]; p++){
               if (p->state == RUNNABLE && p->queue == currentQueue ) {
                 contextSwitch(c, p);
                 break;
@@ -642,7 +642,7 @@ wakeup1(void *chan)
 {
   struct proc *p;
   for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
-    
+
     if(p->state == SLEEPING && p->chan == chan){
       p->state = RUNNABLE;
       if(policy== 4){
